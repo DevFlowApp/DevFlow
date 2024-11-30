@@ -153,9 +153,11 @@ export default function Login() {
               </TouchableOpacity>
               <Text style={styles.checkboxLabel}>Lembrar de mim</Text>
             </View>
-            <Pressable>
-              <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
-            </Pressable>
+            <Pressable onPress={() => router.push("/resetsenha")}>
+  <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
+</Pressable>
+
+
           </View>
           {/* Botão de login */}
           <SubmitButton onPress={handleLogin} />

@@ -14,10 +14,14 @@ export default function SubmitButton({ onPress }: any) {
 const styles = StyleSheet.create({
   buttonSubmit: {
     backgroundColor: "#0077ff",
-    padding: screenWidth < 375 ? 13 : 15,
-    borderRadius: 5,
+    paddingHorizontal: 20, 
+    paddingVertical: 10,   
+    borderRadius: 30,     
     justifyContent: "center",
+    alignItems: "center",
+    minWidth: 150,        
   },
+
   buttonText: {
     textAlign: "center",
     color: "#fff",

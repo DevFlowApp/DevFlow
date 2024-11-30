@@ -1,16 +1,20 @@
+import React from "react";
 import {
-  Image,
+  ImageBackground,
   StyleSheet,
-  Platform,
   View,
   Text,
-  Button,
-  Pressable,
+  Image, 
 } from "react-native";
 import { useRouter } from "expo-router";
 import SubmitButton from "../_components/button";
 
-export default function beginScreen() {
+
+const backgroundImage = require("../../assets/images/teste.png"); 
+
+const smallImage = require("../../assets/images/DevFlowLogo.png");
+
+export default function BeginScreen() {
   const router = useRouter();
 
   const loginRedirect = () => {
@@ -21,18 +25,23 @@ export default function beginScreen() {
   };
 
   return (
-    <View style={styles.beginSection}>
+    <ImageBackground source={backgroundImage} style={styles.beginSection}>
       <View style={styles.beginContainer}>
-      <Text style={{ color: "#fff", fontSize: 32, fontWeight: 'bold', textAlign: "center", marginBottom: 30 }}>Sua jornada como dev começa aqui!</Text>
-      <SubmitButton onPress={loginRedirect} />
-        <Text style={{ color: "#fff", fontSize: 16, textAlign: "center", marginTop: 30 }}>
+   
+        <Image source={smallImage} style={styles.smallImage} />
+
+        <Text style={styles.title}>
+          Sua jornada como dev começa aqui!
+        </Text>
+        <SubmitButton onPress={loginRedirect} />
+        <Text style={styles.subtitle}>
           Não possui uma conta?{" "}
-          <Text style={{ color: "#0077ff" }} onPress={registerRedirect}>
+          <Text style={styles.link} onPress={registerRedirect}>
             Crie já!
           </Text>
         </Text>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -40,8 +49,7 @@ const styles = StyleSheet.create({
   beginSection: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "#0A0A0A",
-
+    resizeMode: "cover", 
   },
   beginContainer: {
     height: 410,
@@ -49,7 +57,31 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     borderTopEndRadius: 70,
     borderTopStartRadius: 70,
-    backgroundColor: "#101010",
+    backgroundColor: "rgba(16, 16, 16, 0.8)", 
     flexDirection: "column",
+    position: "relative", 
+  },
+  smallImage: {
+    position: "absolute",
+    top: -450, 
+    right: 20, 
+    width: 160, 
+    height: 50, 
+  },
+  title: {
+    color: "#fff",
+    fontSize: 32,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 30,
+  },
+  subtitle: {
+    color: "#fff",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 30,
+  },
+  link: {
+    color: "#0077ff",
   },
 });
