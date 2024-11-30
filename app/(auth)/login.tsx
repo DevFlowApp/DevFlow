@@ -14,6 +14,7 @@ import SubmitButton from "../_components/button";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../(tabs)/supabaseClient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -27,7 +28,6 @@ export default function Login() {
 
   const toggleCheckbox = () => setRememberMe(!rememberMe);
 
-  // Login com email e senha
   const handleLogin = async () => {
     if (!email || !password) {
       alert("Por favor, preencha todos os campos.");
@@ -40,40 +40,48 @@ export default function Login() {
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+       
+        throw new Error(error.message);
+      }
 
-      // Caso o login seja bem-sucedido
       alert("Login realizado com sucesso!");
-      router.push("/(tabs)/home");
+      
+
+      if (rememberMe) {
+        await AsyncStorage.setItem("email", email);
+        await AsyncStorage.setItem("password", password);
+      }
+
+      router.push("/(tabs)/home"); 
     } catch (error) {
       console.error("Erro ao fazer login:", error.message);
       alert("Erro ao fazer login. Verifique suas credenciais.");
     }
   };
 
-  // Login com GitHub
   const loginWithGitHub = async () => {
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "github",
         options: {
-          redirectTo: "https://eehksoydiaykjdkemuxa.supabase.co/auth/v1/callback",
+          redirectTo: "http://localhost:3000/auth/v1/callback",
         },
       });
       if (error) throw new Error(error.message);
-      if (data?.url) Linking.openURL(data.url); // Redireciona para o navegador
+      if (data?.url) Linking.openURL(data.url);
     } catch (error) {
       console.error("Erro ao autenticar com GitHub:", error.message);
     }
   };
+  
 
-  // Login com Discord
   const loginWithDiscord = async () => {
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "discord",
         options: {
-          redirectTo: "https://eehksoydiaykjdkemuxa.supabase.co/auth/v1/callback",
+          redirectTo: "https://<project-ref>.supabase.co/auth/v1/callback", 
         },
       });
       if (error) throw new Error(error.message);
@@ -91,7 +99,19 @@ export default function Login() {
         router.push("/(tabs)/home");
       }
     };
+
+    const checkRememberMe = async () => {
+      const savedEmail = await AsyncStorage.getItem("email");
+      const savedPassword = await AsyncStorage.getItem("password");
+      if (savedEmail && savedPassword) {
+        setEmail(savedEmail);
+        setPassword(savedPassword);
+        setRememberMe(true);
+      }
+    };
+
     checkSession();
+    checkRememberMe();
   }, [router]);
 
   return (
