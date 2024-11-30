@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,40 +7,110 @@ import {
   Pressable,
   StyleSheet,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import FormHeader from "../_components/formHeader";
 import SubmitButton from "../_components/button";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { supabase } from "../(tabs)/supabaseClient";
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function Login() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const registerRedirect = () => {
-    router.push("/register");
+  const handleRegisterRedirect = () => router.push("/register");
+
+  const toggleCheckbox = () => setRememberMe(!rememberMe);
+
+  // Login com email e senha
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      // Caso o login seja bem-sucedido
+      alert("Login realizado com sucesso!");
+      router.push("/(tabs)/home");
+    } catch (error) {
+      console.error("Erro ao fazer login:", error.message);
+      alert("Erro ao fazer login. Verifique suas credenciais.");
+    }
   };
 
-  const toggleCheckbox = () => {
-    setRememberMe(!rememberMe);
+  // Login com GitHub
+  const loginWithGitHub = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "github",
+        options: {
+          redirectTo: "https://eehksoydiaykjdkemuxa.supabase.co/auth/v1/callback",
+        },
+      });
+      if (error) throw new Error(error.message);
+      if (data?.url) Linking.openURL(data.url); // Redireciona para o navegador
+    } catch (error) {
+      console.error("Erro ao autenticar com GitHub:", error.message);
+    }
   };
+
+  // Login com Discord
+  const loginWithDiscord = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "discord",
+        options: {
+          redirectTo: "https://eehksoydiaykjdkemuxa.supabase.co/auth/v1/callback",
+        },
+      });
+      if (error) throw new Error(error.message);
+      if (data?.url) Linking.openURL(data.url);
+    } catch (error) {
+      console.error("Erro ao autenticar com Discord:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        console.log("Usuário já logado:", session.user);
+        router.push("/(tabs)/home");
+      }
+    };
+    checkSession();
+  }, [router]);
 
   return (
     <View style={styles.container}>
       <View style={styles.FormContainer}>
         <FormHeader />
         <View style={styles.FormInfos}>
+          {/* Campo de email */}
           <View style={styles.inputWrapper}>
             <View style={styles.blueBar} />
             <TextInput
               style={styles.input}
               placeholder="Insira seu email..."
               placeholderTextColor="#555555"
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
+          {/* Campo de senha */}
           <View style={styles.inputWrapper}>
             <View style={styles.blueBar} />
             <TextInput
@@ -47,44 +118,44 @@ export default function Login() {
               placeholder="Insira sua senha..."
               secureTextEntry
               placeholderTextColor="#555555"
+              value={password}
+              onChangeText={setPassword}
             />
           </View>
+          {/* Checkbox e opção de esquecimento de senha */}
           <View style={styles.checkboxContainer}>
             <View style={styles.rememberMe}>
               <TouchableOpacity
                 onPress={toggleCheckbox}
-                style={[
-                  styles.checkbox,
-                  rememberMe && styles.checkboxSelected,
-                ]}
+                style={[styles.checkbox, rememberMe && styles.checkboxSelected]}
               >
-                {rememberMe && (
-                  <Ionicons
-                    name="checkmark"
-                    size={16}
-                    color="#fff" 
-                  />
-                )}
+                {rememberMe && <Ionicons name="checkmark" size={16} color="#fff" />}
               </TouchableOpacity>
-
-              <Text style={styles.checkboxLabel}>Lembrar de vc</Text>
+              <Text style={styles.checkboxLabel}>Lembrar de mim</Text>
             </View>
             <Pressable>
               <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
             </Pressable>
           </View>
-          <SubmitButton />
+          {/* Botão de login */}
+          <SubmitButton onPress={handleLogin} />
         </View>
+
+        {/* Opções de login social */}
         <View style={styles.FormFooter}>
           <Text style={{ color: "#fff", fontSize: 14 }}>
             Não possui uma conta?{" "}
-            <Text style={{ color: "#0077ff" }} onPress={registerRedirect}>
+            <Text style={{ color: "#0077ff" }} onPress={handleRegisterRedirect}>
               Crie já!
             </Text>
           </Text>
           <View style={[styles.icons, { alignItems: "center", top: 10 }]}>
-            <Ionicons name="logo-github" size={35} color="#fff" />
-            <Ionicons name="logo-google" size={35} color="#fff" />
+            <TouchableOpacity onPress={loginWithGitHub}>
+              <Ionicons name="logo-github" size={35} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={loginWithDiscord}>
+              <Ionicons name="logo-discord" size={35} color="#fff" />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -95,7 +166,6 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 0,
     padding: 30,
     justifyContent: "center",
     backgroundColor: "#0A0A0A",
@@ -124,7 +194,6 @@ const styles = StyleSheet.create({
   input: {
     height: screenWidth < 375 ? 50 : 60,
     backgroundColor: "#101010",
-    borderWidth: 0,
     borderRadius: 5,
     paddingLeft: 40,
     fontSize: screenWidth < 375 ? 16 : 18,
