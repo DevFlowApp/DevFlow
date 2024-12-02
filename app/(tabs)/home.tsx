@@ -197,11 +197,10 @@ const styles = StyleSheet.create({
   modalHeader: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingHorizontal: 30,
+    paddingVertical: 30,
     gap: 20,
     backgroundColor: "#101010",
-    borderBottomWidth: 1,
   },
 
   userImage: {
@@ -232,7 +231,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
-    borderBottomWidth: 1,
     padding: 10,
   },
 });

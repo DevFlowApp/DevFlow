@@ -25,8 +25,8 @@ export default function TabLayout() {
           tabBarShowLabel: false,
           tabBarStyle: {
             backgroundColor: "#101010",
-            paddingTop: 10,
             height: 60,
+            justifyContent: 'center'
           },
         }}
       >
