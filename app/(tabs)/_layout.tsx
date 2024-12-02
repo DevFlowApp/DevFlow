@@ -14,8 +14,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 export default function TabLayout() {
-
-
   return (
     <>
       <Tabs
@@ -26,7 +24,7 @@ export default function TabLayout() {
           tabBarStyle: {
             backgroundColor: "#101010",
             height: 60,
-            justifyContent: 'center'
+            justifyContent: "center",
           },
         }}
       >
@@ -35,7 +33,25 @@ export default function TabLayout() {
           options={{
             title: "Home",
             tabBarIcon: ({ color }) => (
-              <Ionicons size={28} name="home" color={color} />
+              <Ionicons size={28} name="home-outline" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="courses"
+          options={{
+            title: "Cursos",
+            tabBarIcon: ({ color }) => (
+              <Ionicons size={28} name="desktop-outline" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="notifications"
+          options={{
+            title: "Notificações",
+            tabBarIcon: ({ color }) => (
+              <Ionicons size={28} name="notifications-outline" color={color} />
             ),
           }}
         />
@@ -44,13 +60,11 @@ export default function TabLayout() {
           options={{
             title: "Perfil",
             tabBarIcon: ({ color }) => (
-              <Ionicons size={28} name="person" color={color} />
+              <Ionicons size={28} name="person-outline" color={color} />
             ),
           }}
         />
       </Tabs>
-
-    
     </>
   );
 }

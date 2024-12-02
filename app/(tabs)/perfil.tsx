@@ -226,7 +226,6 @@ const styles = StyleSheet.create({
 
   postHeader: {
     flexDirection: "row",
-    alignItems: "center",
     gap: 15,
   },
 
