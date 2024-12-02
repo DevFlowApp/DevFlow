@@ -30,13 +30,6 @@ const posts = [
     time: "8h",
     content: "Conteúdo 2",
   },
-  {
-    id: "3",
-    username: "Nome Usuário 3",
-    handle: "@nomeusuario3",
-    time: "2h",
-    content: "Conteúdo 3",
-  },
 ];
 
 export default function HomeScreen() {
@@ -159,7 +152,6 @@ const styles = StyleSheet.create({
 
   postHeader: {
     flexDirection: "row",
-    alignItems: "center",
     gap: 15,
   },
 
@@ -224,7 +216,7 @@ const styles = StyleSheet.create({
   },
 
   modalContent: {
-    paddingInline: 20,
+    paddingInline: 30,
     marginTop: 20,
   },
   inputTitle: {

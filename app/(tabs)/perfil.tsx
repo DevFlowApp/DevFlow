@@ -2,7 +2,6 @@ import { StyleSheet, View, TouchableOpacity, TextInput, Text, ScrollView, FlatLi
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
-// Exemplo de dados para os posts
 const posts = [
   {
     id: "1",
