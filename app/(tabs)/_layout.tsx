@@ -1,44 +1,70 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import React, { useState } from "react";
+import { Tabs } from "expo-router";
+import {
+  View,
+  TouchableOpacity,
+  Modal,
+  Image,
+  StyleSheet,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            position: 'absolute',
+    <>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: "#0077ff",
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarStyle: {
+            backgroundColor: "#101010",
+            height: 60,
+            paddingTop: 10
           },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="home"
+          options={{
+            title: "Home",
+            tabBarIcon: ({ color }) => (
+              <Ionicons size={28} name="home-outline" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="courses"
+          options={{
+            title: "Cursos",
+            tabBarIcon: ({ color }) => (
+              <Ionicons size={28} name="desktop-outline" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="notifications"
+          options={{
+            title: "Notificações",
+            tabBarIcon: ({ color }) => (
+              <Ionicons size={28} name="notifications-outline" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="perfil"
+          options={{
+            title: "Perfil",
+            tabBarIcon: ({ color }) => (
+              <Ionicons size={28} name="person-outline" color={color} />
+            ),
+          }}
+        />
+      </Tabs>
+    </>
   );
 }

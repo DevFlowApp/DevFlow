@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
 
   DevFlowLogo: {
-    width: screenWidth < 375 ? 150 : 190,
+    width: screenWidth < 375 ? 130 : 180,
     height: 100,
     resizeMode: "contain",
   },
